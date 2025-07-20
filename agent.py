@@ -1,3 +1,23 @@
+# PS: prototype fait pour tourner en local
+"""
+DESCRIPTION:
+c'est ce qu'on appel un "EVI" (Employé Virtuel Intelligent).
+    déployer sur un server et connecté & connecté par un infrastructure telephonique (astersik), 
+ il travail h24  << pour vous >> en automatisant une partie de votre activé ( proffessionnelle, informelle....)
+
+    
+   I) - vous fournissé toutes les infos sur votre activité 
+                       |||
+   II) - ia les enregistre par un la methode du RAG
+                       |||
+   III) - et vous avez maintenant une personne capable de ventre, promouvoir, discuter, informer avec n'importe qui en fonction de vos besoin          
+
+
+
+
+                    C'EST CA L'AFFIQUE DEDAIN, C' EST L'EVI !!!! 
+"""
+
 import queue
 import json
 import sounddevice as sd
@@ -28,11 +48,14 @@ vectorstore = Chroma.from_documents(docs, embedding)
 
 # 🔍 Construction de la chaîne RAG
 retriever = vectorstore.as_retriever()
-llm = Ollama(model="gemma3:1b")
+llm = Ollama(model="gemma3:4b")                               "LE MODEL UTILISER EST PETIT POUR DES RAISON DE MANQUE DE PUISSANCE "
 
 
 
 # Template & RAG
+
+""" On va prendre l'exemple d'un restorant vantant automatiser sa comunication 
+              on construit donc un emplyé (EVI) pour ça """
 
 prompt_template1 = PromptTemplate(
     input_variables=["context", "question"],
@@ -73,10 +96,9 @@ def callback(indata, frames, time, status):
         print("⚠️", status)
     q.put(bytes(indata))
 
-model = Model(r"C:\Users\PC\Documents\MES_CODES\python\projet_IA\vosk-model-small-fr-0.22\vosk-model-small-fr-0.22")
+model = Model(r"vosk-model-small-fr-0.22") # Un model de convertion voice_to_text
 recognizer = KaldiRecognizer(model, 16000)
 
-print("🎙️ Assistant en écoute... (Ctrl+C pour arrêter)")
 print("🎙️ Assistant en écoute... (Ctrl+C pour arrêter)")
 
 with sd.RawInputStream(samplerate=16000, blocksize=8000, dtype='int16',
